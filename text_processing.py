@@ -23,6 +23,7 @@ class text_processing:
         try:
             edited = text.strip()
             edited = edited.lower()
+            edited = re.sub(r':', ' ', edited)
             regex_badchars = re.compile(pattern=r"(&#x200B;)|\\|\*+|\.{2,}|…|\S*https?:\S*|\s*@\S{2,}", flags=re.IGNORECASE)
             regex_whitespace = re.compile(pattern=r" {2,}", flags=re.IGNORECASE)
             regex_newline = re.compile(pattern="\n|\t", flags=re.IGNORECASE)
@@ -40,7 +41,7 @@ class text_processing:
         for header in headers:
             df[header] = df[header].apply(lambda text: self.de_emojify(text))
             df[header] = df[header].apply(lambda text: self.remove_whitespace(text))
-            df[header].replace('', np.nan, inplace=True)
+            df[header] = df[header].replace('', np.nan)
         df.dropna(inplace = True)
         return df
 
